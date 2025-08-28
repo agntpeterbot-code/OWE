@@ -16,15 +16,15 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
-        run: npm install
-        # if you have no package.json, you can skip this step
+      # Only install dependencies if you have a package.json
+      # - name: Install dependencies
+      #   run: npm install
 
       - name: Run wallet poller script
         run: node watch_sol.js
         env:
-          RPC_KEY: ${{ secrets.RPC_KEY }}
-          TARGET_ACCOUNT: ${{ secrets.TARGET_ACCOUNT }}
+          SHYFT_API_KEY: ${{ secrets.RPC_KEY }}
+          ACCOUNT: ${{ secrets.TARGET_ACCOUNT }}
 
       - name: Commit logs
         run: |
