@@ -1,7 +1,7 @@
 name: Shyft Wallet Poller
 
 on:
-  workflow_dispatch: # allows manual run
+  workflow_dispatch:  # allows manual run
 
 jobs:
   poll-wallet:
@@ -16,15 +16,11 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
-        run: |
-          npm install ws
-
       - name: Run wallet poller script
         run: node watch_sol.js
         env:
-          RPC_KEY: guPcusegbHAJhw__      # your API key
-          TARGET_ACCOUNT: B2mmvp7qGSHRESk4QD84Ay7m49BggNBz6e8TTRPjKKgk  # target wallet
+          SHYFT_API_KEY: guPcusegbHAJhw__
+          ACCOUNT: B2mmvp7qGSHRESk4QD84Ay7m49BggNBz6e8TTRPjKKgk
 
       - name: Commit logs
         run: |
