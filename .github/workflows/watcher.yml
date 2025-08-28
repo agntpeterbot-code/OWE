@@ -6,6 +6,8 @@ on:
 jobs:
   poll-wallet:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # allow pushing changes
 
     steps:
       - name: Checkout repository
