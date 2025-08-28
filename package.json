@@ -1,0 +1,10 @@
+{
+  "name": "owe-wallet-poller",
+  "version": "1.0.0",
+  "description": "Track SOL transfers from a target wallet",
+  "main": "watch_sol.js",
+  "scripts": {
+    "start": "node watch_sol.js"
+  },
+  "dependencies": {}
+}
