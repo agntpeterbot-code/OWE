@@ -6,5 +6,7 @@
   "scripts": {
     "start": "node watch_sol.js"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ws": "^8.15.0"
+  }
 }
