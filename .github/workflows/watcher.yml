@@ -2,12 +2,12 @@ name: Shyft Wallet Poller
 
 on:
   workflow_dispatch:  # allows manual run
+  schedule:
+    - cron: '*/5 * * * *'  # runs every 5 minutes
 
 jobs:
   poll-wallet:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # allow pushing changes
 
     steps:
       - name: Checkout repository
