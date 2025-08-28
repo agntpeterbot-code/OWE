@@ -1,0 +1,32 @@
+name: Shyft Wallet Poller
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # run every 5 minutes
+  workflow_dispatch:        # allow manual run
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - run: npm install
+
+      - name: Run watcher
+        env:
+          SHYFT_API_KEY: ${{ secrets.SHYFT_API_KEY }}
+          ACCOUNT: ${{ secrets.ACCOUNT }}
+        run: node watch_sol_periodic.js
+
+      - name: Commit logs
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git add sol_transfers.log processed_signatures.json || true
+          git diff --cached --quiet || (git commit -m "Update logs" && git push)
