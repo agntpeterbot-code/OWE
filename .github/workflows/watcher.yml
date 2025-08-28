@@ -1,32 +1,35 @@
 name: Shyft Wallet Poller
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # run every 5 minutes
-  workflow_dispatch:        # allow manual run
+  workflow_dispatch: # allows manual run
 
 jobs:
-  poll:
+  poll-wallet:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 22
 
-      - run: npm install
+      - name: Install dependencies
+        run: npm install
+        # if you have no package.json, you can skip this step
 
-      - name: Run watcher
+      - name: Run wallet poller script
+        run: node watch_sol.js
         env:
-          SHYFT_API_KEY: ${{ secrets.SHYFT_API_KEY }}
-          ACCOUNT: ${{ secrets.ACCOUNT }}
-        run: node watch_sol_periodic.js
+          RPC_KEY: ${{ secrets.RPC_KEY }}
+          TARGET_ACCOUNT: ${{ secrets.TARGET_ACCOUNT }}
 
       - name: Commit logs
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@users.noreply.github.com
-          git add sol_transfers.log processed_signatures.json || true
-          git diff --cached --quiet || (git commit -m "Update logs" && git push)
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add sol_transfers.log processed_signatures.json
+          git commit -m "Update logs" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
